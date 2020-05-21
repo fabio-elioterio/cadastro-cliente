@@ -31,6 +31,8 @@ public class ClientController extends HttpServlet {
 		} else {
 
 			for (Client cliente : clienteService.getClients()) {
+				writer.println("----------------------------");
+				writer.println("                            ");
 				writer.println("Name: " + cliente.getName());
 				writer.println("Age: " + cliente.getAge());
 				writer.println("Email: " + cliente.getEmail());
@@ -58,9 +60,9 @@ public class ClientController extends HttpServlet {
 			clienteService.clientInsert(cliente);
 
 			response.getWriter()
-					.print("nome :" + cliente.getName() + "\nage :" + cliente.getAge() + "\ncpf :" + cliente.getCpf()
-							+ "\nemadedededeil :" + cliente.getEmail() + "\ntelephone :" + cliente.getTelephone()
-							+ "\naddress :" + cliente.getAddress());
+					.print("nome: " + cliente.getName() + "\nage: " + cliente.getAge() + "\ncpf: " + cliente.getCpf()
+							+ "\nemail: " + cliente.getEmail() + "\ntelephone: " + cliente.getTelephone()
+							+ "\naddress: " + cliente.getAddress());
 			writer.print(CLIENTE_INSERIDO);
 
 		} else {
