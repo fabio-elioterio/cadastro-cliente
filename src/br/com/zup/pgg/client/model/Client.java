@@ -1,7 +1,11 @@
 package br.com.zup.pgg.client.model;
 
-public class Client {
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
+@EntityScan
+public class Client {
+	
+	
 	private String name;
 	private String cpf;
 	private int age;
