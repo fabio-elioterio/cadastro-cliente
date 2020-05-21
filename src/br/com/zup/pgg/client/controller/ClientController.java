@@ -2,8 +2,6 @@ package br.com.zup.pgg.client.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,11 +16,9 @@ import br.com.zup.pgg.client.service.ClientService;
 public class ClientController extends HttpServlet {
 
 	private static final String CLIENTE_INSERIDO = "\nCliente inserido com sucesso!";
-	private static final String CLIENTE_JA_EXISTE = "Cliente ja existe";
-	private static final String CPF_NULO = "cpf nulo";
+	private static final String ERRO_AO_INSERIR_CLIENTE = "Cliente ja existe ou o campo cpf está nulo";
 	private static final long serialVersionUID = 1L;
-	static Map<String, Client> listaDeCliente = new HashMap<String, Client>();
-	ClientService clienteService = new ClientService();
+	static ClientService clienteService = new ClientService();
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		PrintWriter writer = resp.getWriter();
@@ -30,16 +26,10 @@ public class ClientController extends HttpServlet {
 
 		if (cpf != null) {
 
-			if (listaDeCliente.containsKey(cpf)) {
-
-				buscaCliente(req, resp);
-
-			} else {
-
-				writer.print("CPF NÃO ENCONTRADO!");
-			}
+			buscaCliente(req, resp);
 
 		} else {
+
 			for (Client cliente : clienteService.getClients()) {
 				writer.println("Name: " + cliente.getName());
 				writer.println("Age: " + cliente.getAge());
@@ -47,7 +37,6 @@ public class ClientController extends HttpServlet {
 				writer.println("Cpf: " + cliente.getCpf());
 				writer.println("Telephone: " + cliente.getTelephone());
 				writer.println("Address: " + cliente.getAddress());
-				
 			}
 		}
 	}
@@ -66,67 +55,58 @@ public class ClientController extends HttpServlet {
 			cliente.setTelephone(request.getParameter("telephone"));
 			cliente.setAddress(request.getParameter("address"));
 
-			if (!listaDeCliente.containsKey(cpf)) {
+			clienteService.clientInsert(cliente);
 
-				clienteService.clientInsert(cliente);
-
-				response.getWriter()
-						.print("nome :" + cliente.getName() + "\nage :" + cliente.getAge() + "\ncpf :"
-								+ cliente.getCpf() + "\nemail :" + cliente.getEmail() + "\ntelephone :"
-								+ cliente.getTelephone() + "\naddress :" + cliente.getAddress());
-				writer.print(CLIENTE_INSERIDO);
-
-			}
-
-			writer.print(CLIENTE_JA_EXISTE);
+			response.getWriter()
+					.print("nome :" + cliente.getName() + "\nage :" + cliente.getAge() + "\ncpf :" + cliente.getCpf()
+							+ "\nemadedededeil :" + cliente.getEmail() + "\ntelephone :" + cliente.getTelephone()
+							+ "\naddress :" + cliente.getAddress());
+			writer.print(CLIENTE_INSERIDO);
 
 		} else {
+			writer.print(ERRO_AO_INSERIR_CLIENTE);
 
-			writer.print(CPF_NULO);
 		}
-
 	}
 
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String cpf = request.getParameter("cpf");
-		Client clienteBuscado = listaDeCliente.get(cpf);
+		Client clientToUpDate = new Client();
 		PrintWriter writer = response.getWriter();
 
 		if (cpf != null) {
 
-			if (listaDeCliente.containsKey(cpf)) {
+			clientToUpDate.setName(request.getParameter("name"));
+			clientToUpDate.setAge(Integer.parseInt(request.getParameter("age")));
+			clientToUpDate.setEmail(request.getParameter("email"));
+			clientToUpDate.setTelephone(request.getParameter("telephone"));
+			clientToUpDate.setAddress(request.getParameter("address"));
 
-				clienteBuscado.setName(request.getParameter("name"));
-				clienteBuscado.setAge(Integer.parseInt(request.getParameter("age")));
-				clienteBuscado.setEmail(request.getParameter("email"));
-				clienteBuscado.setTelephone(request.getParameter("telephone"));
-				clienteBuscado.setAddress(request.getParameter("address"));
+			clienteService.puClient(clientToUpDate, cpf);
 
-				listaDeCliente.put(cpf, clienteBuscado);
-				response.getWriter();
-				writer.print("name :" + clienteBuscado.getName() + "\nage :" + clienteBuscado.getAge() + "\ncpf :"
-						+ clienteBuscado.getCpf() + "\nemail :" + clienteBuscado.getEmail() + "\ntelephone :"
-						+ clienteBuscado.getTelephone() + "\naddress :" + clienteBuscado.getAddress());
+			response.getWriter();
+			writer.print("name: " + clientToUpDate.getName() + "\nage: " + clientToUpDate.getAge() + "\ncpf: "
+					+ clientToUpDate.getCpf() + "\nemail: " + clientToUpDate.getEmail() + "\ntelephone: "
+					+ clientToUpDate.getTelephone() + "\naddress: " + clientToUpDate.getAddress() + "\n");
 
-			} else {
+		} else {
 
-				writer.print("CPF NAO ENCONTRADO!");
-			}
-			writer.print("Cliente Atualizado com sucesso!");
+			writer.print("CPF NAO ENCONTRADO!");
 		}
+		writer.print("Cliente Atualizado com sucesso!");
 	}
 
-//	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//		String cpf = req.getParameter("cpf");
-//		clienteService.deleteCliente(cpf);
-//
-//	}
-//
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String cpf = req.getParameter("cpf");
+		clienteService.delete(cpf);
+
+	}
+
 	public static void buscaCliente(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		PrintWriter writer = resp.getWriter();
 		String cpf = req.getParameter("cpf");
-		Client clienteBuscado = listaDeCliente.get(cpf);
+		Client clienteBuscado = clienteService.getClientByCpf(cpf);
 		writer.println("Name: " + clienteBuscado.getName());
 		writer.println("Age: " + clienteBuscado.getAge());
 		writer.println("Email: " + clienteBuscado.getEmail());

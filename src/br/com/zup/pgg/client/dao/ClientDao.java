@@ -33,14 +33,12 @@ public class ClientDao {
 			stmt.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
 	public List<Client> listaClientes() {
-		Client cliente = new Client();
 		List<Client> clienteLista = new ArrayList<>();
 		String sql = "select * from cliente";
 
@@ -50,15 +48,18 @@ public class ClientDao {
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 
+				Client cliente = new Client();
+
 				cliente.setName(rs.getString("name"));
 				cliente.setAge(rs.getInt("age"));
 				cliente.setCpf(rs.getString("cpf"));
 				cliente.setEmail(rs.getString("email"));
 				cliente.setTelephone(rs.getString("telephone"));
+				cliente.setAddress(rs.getString("address"));
 
 				clienteLista.add(cliente);
 			}
-
+			rs.close();
 			stmt.close();
 		} catch (SQLException e) {
 
@@ -66,33 +67,72 @@ public class ClientDao {
 		return clienteLista;
 
 	}
-	
+
 	public Client getClientByCpf(String cpf) {
-		
+
 		String sql = "select * from cliente where cpf = ?";
 		Client client = new Client();
-		
+
 		try {
 			PreparedStatement stmt = conn.prepareStatement(sql);
-			
+
 			stmt.setString(1, cpf);
 			ResultSet result = stmt.executeQuery();
-			
-			if(result.next()) {
+
+			if (result.next()) {
 				client.setName(result.getString("name"));
 				client.setAge(result.getInt("age"));
 				client.setCpf(result.getString("cpf"));
 				client.setEmail(result.getString("email"));
 				client.setTelephone(result.getString("telephone"));
+				client.setAddress(result.getString("address"));
 			}
-			
+
 			result.close();
 			stmt.close();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return client;
+	}
+
+	public void putClient(String cpf, Client cliente) {
+
+		String sql = "update cliente " + " set name = ?, age = ?, email = ?, telephone = ?, address = ?"
+				+ " where cpf = ?";
+
+		try {
+
+			PreparedStatement stmt = conn.prepareStatement(sql);
+
+			stmt.setString(1, cliente.getName());
+			stmt.setInt(2, cliente.getAge());
+			stmt.setString(3, cliente.getEmail());
+			stmt.setString(4, cliente.getTelephone());
+			stmt.setString(5, cliente.getAddress());
+			stmt.setString(6, cpf);
+
+			stmt.executeUpdate();
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void delete(String cpf) {
+
+		String sql = "delete from cliente where cpf = ?";
+
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+
+			stmt.setString(1, cpf);
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

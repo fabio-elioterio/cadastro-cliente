@@ -22,4 +22,12 @@ public class ClientService {
 	public Client getClientByCpf(String cpf) {
 		return clientDao.getClientByCpf(cpf);
 	}
+	
+	public void puClient(Client client, String cpf) {
+		clientDao.putClient(cpf, client);
+	}
+	
+	public void delete(String cpf) {
+		clientDao.delete(cpf);
+	}
 }
