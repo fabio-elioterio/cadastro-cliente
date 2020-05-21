@@ -66,7 +66,7 @@ public class ClientController extends HttpServlet {
 			writer.print(CLIENTE_INSERIDO);
 
 		} else {
-			//TODO: validar erro com mesmo cpf
+			// TODO: validar erro com mesmo cpf
 			writer.print(ERRO_AO_INSERIR_CLIENTE);
 
 		}
@@ -89,9 +89,9 @@ public class ClientController extends HttpServlet {
 			clienteService.puClient(clientToUpDate, cpf);
 
 			response.getWriter();
-			writer.print("name: " + clientToUpDate.getName() + "\nage: " + clientToUpDate.getAge() + "\ncpf: "
-					+ clientToUpDate.getCpf() + "\nemail: " + clientToUpDate.getEmail() + "\ntelephone: "
-					+ clientToUpDate.getTelephone() + "\naddress: " + clientToUpDate.getAddress() + "\n");
+			writer.print("name: " + clientToUpDate.getName() + "\nage: " + clientToUpDate.getAge() + "\nemail: "
+					+ clientToUpDate.getEmail() + "\ntelephone: " + clientToUpDate.getTelephone() + "\naddress: "
+					+ clientToUpDate.getAddress() + "\n");
 
 		} else {
 
