@@ -66,6 +66,7 @@ public class ClientController extends HttpServlet {
 			writer.print(CLIENTE_INSERIDO);
 
 		} else {
+			//TODO: validar erro com mesmo cpf
 			writer.print(ERRO_AO_INSERIR_CLIENTE);
 
 		}
