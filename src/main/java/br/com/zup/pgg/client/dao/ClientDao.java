@@ -14,7 +14,7 @@ public class ClientDao {
 
 	Connection conn = new ConnectionFactory().getConnection();
 
-	public void clientInsert(Client cliente) {
+	public Client clientInsert(Client cliente) {
 
 		String sql = " insert into cliente " + "(name, age, cpf, email, telephone, address)"
 				+ " values (?, ?, ?, ?, ?, ?)";
@@ -36,6 +36,7 @@ public class ClientDao {
 			e.printStackTrace();
 		}
 
+		return cliente;
 	}
 
 	public List<Client> listaClientes() {
@@ -98,7 +99,7 @@ public class ClientDao {
 		return client;
 	}
 
-	public void putClient(String cpf, Client cliente) {
+	public Client putClient(String cpf, Client cliente) {
 
 		String sql = "update cliente " + " set name = ?, age = ?, email = ?, telephone = ?, address = ?"
 				+ " where cpf = ?";
@@ -119,6 +120,8 @@ public class ClientDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		return cliente;
 	}
 
 	public void delete(String cpf) {
