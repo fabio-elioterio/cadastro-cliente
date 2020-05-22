@@ -13,7 +13,7 @@ public class ClientService {
 	ClientDao clientDao = new ClientDao();
 
 	public Client clientInsert(Client client) {
-
+		//TODO: validar se o cpf esta entrando null.
 		return this.clientDao.clientInsert(client);
 	}
 
@@ -27,7 +27,7 @@ public class ClientService {
 	}
 
 	public Client puClient(Client client, String cpf) {
-				
+		//TODO: criar regra para que o cpf não possa ser alterado.
 		clientDao.putClient(cpf, client);
 		return client;
 	}
