@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.zup.pgg.client.model.Client;
+import br.com.zup.pgg.client.dto.MensagemDto;
+import br.com.zup.pgg.client.entity.Client;
+import br.com.zup.pgg.client.exception.ClientException;
 import br.com.zup.pgg.client.service.ClientService;
 
 @RestController
@@ -37,7 +39,7 @@ public class ClientController {
 	}
 
 	@GetMapping(path = "/clientes/{cpf}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public Client getByCpf(@PathVariable String cpf) {
+	public Client getByCpf(@PathVariable String cpf) throws ClientException {
 
 		return this.clienteService.getClientByCpf(cpf);
 	}
@@ -49,8 +51,8 @@ public class ClientController {
 	}
 
 	@DeleteMapping(path = "/clientes/{cpf}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public void deleteClient(@PathVariable String cpf) {
-		this.clienteService.delete(cpf);
+	public MensagemDto deleteClient(@PathVariable String cpf) {
+		return this.clienteService.delete(cpf);
 	}
 
 }

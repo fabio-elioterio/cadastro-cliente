@@ -2,37 +2,51 @@ package br.com.zup.pgg.client.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.zup.pgg.client.dao.ClientDao;
-import br.com.zup.pgg.client.model.Client;
+import br.com.zup.pgg.client.dto.MensagemDto;
+import br.com.zup.pgg.client.entity.Client;
+import br.com.zup.pgg.client.exception.ClientException;
+import br.com.zup.pgg.client.repository.ClientRepository;
 
 @Service
 public class ClientService {
 
-	ClientDao clientDao = new ClientDao();
+	private static final String CPF_NÃO_ENCONTRADO = "CPF não encontrado.";
+	private static final String CLIENTE_DELETADO_COM_SUCESSO = "Cliente deletado com sucesso!!!";
+	@Autowired
+	ClientRepository repository;
 
 	public Client clientInsert(Client client) {
-		//TODO: validar se o cpf esta entrando null.
-		return this.clientDao.clientInsert(client);
+
+		return this.repository.save(client);
 	}
 
 	public List<Client> getClients() {
-		return clientDao.listaClientes();
+		return (List<Client>) repository.findAll();
 	}
 
-	public Client getClientByCpf(String cpf) {
+	public Client getClientByCpf(String cpf) throws ClientException {
 
-		return clientDao.getClientByCpf(cpf);
+		Client clientByDB = repository.findByCpf(cpf).orElseThrow(() -> new ClientException(CPF_NÃO_ENCONTRADO));
+
+		return clientByDB;
 	}
 
 	public Client puClient(Client client, String cpf) {
-		//TODO: criar regra para que o cpf não possa ser alterado.
-		clientDao.putClient(cpf, client);
-		return client;
+		Client clientByDB = repository.findById(cpf).get();
+
+		clientByDB.setAddress(client.getAddress());
+		clientByDB.setAge(client.getAge());
+		clientByDB.setEmail(client.getEmail());
+		clientByDB.setTelephone(client.getTelephone());
+
+		return this.repository.save(clientByDB);
 	}
 
-	public void delete(String cpf) {
-		clientDao.delete(cpf);
+	public MensagemDto delete(String cpf) {
+		this.repository.deleteById(cpf);
+		return new MensagemDto(CLIENTE_DELETADO_COM_SUCESSO);
 	}
 }

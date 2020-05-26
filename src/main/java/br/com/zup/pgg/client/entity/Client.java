@@ -1,20 +1,27 @@
-package br.com.zup.pgg.client.model;
+package br.com.zup.pgg.client.entity;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-@EntityScan
+@Entity
 public class Client {
-	
-	
-	private String name;
+
+	@Id
 	private String cpf;
+	@Column(nullable = false)
+	private String name;
+	@Column(nullable = false)
 	private int age;
+	@Column(nullable = false)
 	private String email;
+	@Column(nullable = false)
 	private String telephone;
+	@Column(nullable = false)
 	private String address;
-	
+
 	public Client() {
-		
+
 	}
 
 	public String getName() {
