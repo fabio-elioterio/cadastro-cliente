@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -26,7 +28,8 @@ public class ClientRepositoryTest {
     public void createShouldPersistData() {
 
         //cenário
-        Client client = new Client("0123456789X", "Juliana", 25, "juliana.78@gmail.com", "2569-4535", "Rua Alarico de Toledo Piza, 28A");
+        Client client = new Client("0123456789X", "Juliana", 25, "juliana.78@gmail.com",
+                "2569-4535", "Rua Alarico de Toledo Piza, 28A");
 
         //ação
         this.clientRepository.save(client);
@@ -42,7 +45,8 @@ public class ClientRepositoryTest {
 
     @Test
     public void deleteShouldRemoveData() {
-        Client client = new Client("0123456789X", "Juliana", 25, "juliana.78@gmail.com", "2569-4535", "Rua Alarico de Toledo Piza, 28A");
+        Client client = new Client("0123456789X", "Juliana", 25, "juliana.78@gmail.com",
+                "2569-4535", "Rua Alarico de Toledo Piza, 28A");
         this.clientRepository.save(client);
         clientRepository.delete(client);
 
@@ -51,7 +55,8 @@ public class ClientRepositoryTest {
 
     @Test
     public void upDateShouldChangeAndPersistData() {
-        Client client = new Client("0123456789X", "Juliana", 25, "juliana.78@gmail.com", "2569-4535", "Rua Alarico de Toledo Piza, 28A");
+        Client client = new Client("0123456789X", "Juliana", 25, "juliana.78@gmail.com",
+                "2569-4535", "Rua Alarico de Toledo Piza, 28A");
         this.clientRepository.save(client);
         client.setName("Juliana Vieira");
         client.setAge(27);
@@ -65,12 +70,28 @@ public class ClientRepositoryTest {
     }
     @Test
     public void findByCpfShouldFindClient() {
-        Client client = new Client("0123456789X", "Juliana", 25, "juliana.78@gmail.com", "2569-4535", "Rua do Zenity, 256");
-        Client secondClient = new Client("507966948-93", "Fabio Junior", 19, "fabio.elioterio@zup.com.br", "95962-1891", "Rua Alarico de Toledo Piza, 28A");
+        Client client = new Client("0123456789X", "Juliana", 25, "juliana.78@gmail.com",
+                "2569-4535", "Rua do Zenity, 256");
+        Client secondClient = new Client("507966948-93", "Fabio Junior", 19, "fabio.elioterio@zup.com.br",
+                "95962-1891", "Rua Alarico de Toledo Piza, 28A");
         this.clientRepository.save(client);
         this.clientRepository.save(secondClient);
 
         Assertions.assertThat(clientRepository.findByCpf(secondClient.getCpf()).get());
+    }
+
+    @Test
+    public void findClients() {
+        Client client = new Client("0123456789X", "Juliana", 25, "juliana.78@gmail.com",
+                "2569-4535", "Rua do Zenity, 256");
+        Client secondClient = new Client("507966948-93", "Fabio Junior", 19, "fabio.elioterio@zup.com.br",
+                "95962-1891", "Rua Alarico de Toledo Piza, 28A");
+        this.clientRepository.save(client);
+        this.clientRepository.save(secondClient);
+
+        List<Client> clientList = (List<Client>) clientRepository.findAll();
+
+        Assertions.assertThat(clientList.size()).isEqualTo(6);
     }
 
 }
