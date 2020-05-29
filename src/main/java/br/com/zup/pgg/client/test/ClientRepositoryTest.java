@@ -3,6 +3,7 @@ package br.com.zup.pgg.client.test;
 import br.com.zup.pgg.client.entity.Client;
 import br.com.zup.pgg.client.repository.ClientRepository;
 import org.assertj.core.api.Assertions;
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -93,5 +94,96 @@ public class ClientRepositoryTest {
 
         Assertions.assertThat(clientList.size()).isEqualTo(6);
     }
+
+    @Test
+    public void createWhenCpfIsNullShouldThrowConstraintViolationException() {
+        thrown.expect(ConstraintViolationException.class);
+        thrown.expectMessage("Oops! Parece que o CPF não foi inserido, por favor insera seu CPF.");
+
+        Client client = new Client();
+        client.setName("Fabio");
+        client.setAddress("Rua Alarico de Toledo Piza, 28A");
+        client.setAge(19);
+        client.setEmail("fabio.elioterio@gmail.com");
+        client.setTelephone("2569-4535");
+        this.clientRepository.save(client);
+
+    }
+
+    @Test
+    public void createWhenNameIsNullShouldThrowConstraintViolationException() {
+        thrown.expect(ConstraintViolationException.class);
+        thrown.expectMessage("Oops! Parece que o nome não foi inserido, por favor insera seu nome.");
+
+        Client client = new Client();
+        client.setCpf("50796694893");
+        client.setAddress("Rua Alarico de Toledo Piza, 28A");
+        client.setAge(19);
+        client.setEmail("fabio.elioterio@gmail.com");
+        client.setTelephone("2569-4535");
+        this.clientRepository.save(client);
+
+    }
+
+    @Test
+    public void createWhenAddressIsNullShouldThrowConstraintViolationException() {
+        thrown.expect(ConstraintViolationException.class);
+        thrown.expectMessage("Oops! Parece que o endereço não foi inserido, por favor insera seu endereço.");
+
+        Client client = new Client();
+        client.setName("Fabio");
+        client.setCpf("50796694893");
+        client.setAge(19);
+        client.setEmail("fabio.elioterio@gmail.com");
+        client.setTelephone("2569-4535");
+        this.clientRepository.save(client);
+
+    }
+
+    @Test
+    public void createWhenAgeIsNullShouldThrowConstraintViolationException() {
+        thrown.expect(ConstraintViolationException.class);
+        thrown.expectMessage("Oops! Parece que a idade não foi inserida, por favor insera sua idade.");
+
+        Client client = new Client();
+        client.setName("Fabio");
+        client.setCpf("50796694893");
+        client.setAddress("Rua Alarico de Toledo Piza, 28A");
+        client.setEmail("fabio.elioterio@gmail.com");
+        client.setTelephone("2569-4535");
+        this.clientRepository.save(client);
+
+    }
+
+    @Test
+    public void createWhenEmailIsNullShouldThrowConstraintViolationException() {
+        thrown.expect(ConstraintViolationException.class);
+        thrown.expectMessage("Oops! Parece que o email não foi inserido, por favor insera seu email.");
+
+        Client client = new Client();
+        client.setName("Fabio");
+        client.setCpf("50796694893");
+        client.setAge(19);
+        client.setAddress("Rua Alarico de Toledo Piza, 28A");
+        client.setTelephone("2569-4535");
+        this.clientRepository.save(client);
+
+    }
+
+    @Test
+    public void createWhenTelephoneIsNullShouldThrowConstraintViolationException() {
+        thrown.expect(ConstraintViolationException.class);
+        thrown.expectMessage("Oops! Parece que o telefone não foi inserido, por favor insera seu telefone.");
+
+        Client client = new Client();
+        client.setName("Fabio");
+        client.setCpf("50796694893");
+        client.setAge(19);
+        client.setAddress("Rua Alarico de Toledo Piza, 28A");
+        client.setEmail("fabio.elioterio@zup.com.br");
+        this.clientRepository.save(client);
+
+    }
+
 
 }
